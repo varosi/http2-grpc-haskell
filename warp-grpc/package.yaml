@@ -1,6 +1,6 @@
 name:                warp-grpc
 version:             0.2.0.0
-github:              "higherkindness/http2-grpc-haskell"
+github:              "haskell-grpc-native/http2-grpc-haskell"
 license:             BSD3
 author:              "Lucas DiCioccio, Alejandro Serrano"
 maintainer:          "lucas@dicioccio.fr"
@@ -13,7 +13,7 @@ extra-source-files:
 synopsis:            A minimal gRPC server on top of Warp.
 category:            Networking
 
-description:         Please see the README on Github at <https://github.com/higherkindness/http2-grpc-haskell#readme>
+description:         Please see the README on Github at <https://github.com/haskell-grpc-native/http2-grpc-haskell/blob/master/warp-grpc/README.md>
 
 dependencies:
 - base >= 4.11 && < 5

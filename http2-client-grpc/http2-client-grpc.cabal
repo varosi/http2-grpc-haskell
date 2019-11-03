@@ -2,7 +2,7 @@ name:                http2-client-grpc
 version:             0.8.0.0
 synopsis:            Implement gRPC-over-HTTP2 clients.
 description:         A gRPC over http2-client.
-homepage:            https://github.com/higherkindness/http2-grpc-haskell#readme
+homepage:            https://github.com/haskell-grpc-native/http2-grpc-haskell/blob/master/http2-client-grpc/README.md
 license:             BSD3
 license-file:        LICENSE
 author:              Lucas DiCioccio, Alejandro Serrano
@@ -43,4 +43,4 @@ test-suite http2-client-grpc-test
 
 source-repository head
   type:     git
-  location: https://github.com/higherkindness/http2-grpc-haskell
+  location: https://github.com/haskell-grpc-native/http2-grpc-haskell
