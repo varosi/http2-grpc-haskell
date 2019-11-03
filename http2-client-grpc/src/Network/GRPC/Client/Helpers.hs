@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE GADTs             #-}
 {-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE CPP               #-}
 
 -- | Set of helpers helping with writing gRPC clients with not much exposure of
 -- the http2-client complexity.
@@ -97,6 +98,9 @@ tlsSettings True host port = Just $ TLS.ClientParams {
                                                }
         , TLS.clientSupported            = def { TLS.supportedCiphers = TLS.ciphersuite_default }
         , TLS.clientDebug                = def
+#if MIN_VERSION_tls(1,5,0)
+        , TLS.clientEarlyData            = Nothing
+#endif
         }
 
 
