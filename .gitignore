@@ -1,5 +1,4 @@
 dist/
-stack.yaml.lock
-stack-nightly.yaml.lock
+stack*.yaml.lock
 .stack-work/
 *~

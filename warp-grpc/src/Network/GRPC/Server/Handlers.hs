@@ -3,6 +3,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE CPP #-}
 module Network.GRPC.Server.Handlers where
 
 import           Control.Concurrent.Async (concurrently)
@@ -13,9 +14,18 @@ import           Data.ByteString.Char8 (ByteString)
 import           Data.ByteString.Lazy (toStrict)
 import           Network.GRPC.HTTP2.Encoding
 import           Network.GRPC.HTTP2.Types (path, GRPCStatus(..), GRPCStatusCode(..))
+#if MIN_VERSION_wai(3,2,2)
 import           Network.Wai (Request, getRequestBodyChunk, strictRequestBody)
+#else
+import           Network.Wai (Request, requestBody, strictRequestBody)
+#endif
 
 import Network.GRPC.Server.Wai (WaiHandler, ServiceHandler(..), closeEarly)
+
+#if !MIN_VERSION_wai(3,2,2)
+getRequestBodyChunk :: Request -> IO ByteString
+getRequestBodyChunk = requestBody
+#endif
 
 -- | Handy type to refer to Handler for 'unary' RPCs handler.
 type UnaryHandler i o = Request -> i -> IO o
