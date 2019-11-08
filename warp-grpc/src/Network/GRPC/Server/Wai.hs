@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE CPP #-}
 
 module Network.GRPC.Server.Wai where
 
@@ -15,6 +16,11 @@ import           Network.GRPC.HTTP2.Encoding (Compression, Encoding(..), Decodin
 import           Network.GRPC.HTTP2.Types (GRPCStatus(..), GRPCStatusCode(..), grpcStatusH, grpcMessageH, grpcContentTypeHV, grpcEncodingH, grpcAcceptEncodingH)
 import           Network.HTTP.Types (status200, status404)
 import           Network.Wai (Application, Request(..), rawPathInfo, responseLBS, responseStream, requestHeaders)
+
+#if MIN_VERSION_base(4,11,0)
+#else
+import Data.Monoid ((<>))
+#endif
 
 import Network.GRPC.Server.Helpers (modifyGRPCStatus)
 

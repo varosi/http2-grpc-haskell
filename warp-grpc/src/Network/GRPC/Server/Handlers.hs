@@ -20,6 +20,11 @@ import           Network.Wai (Request, getRequestBodyChunk, strictRequestBody)
 import           Network.Wai (Request, requestBody, strictRequestBody)
 #endif
 
+#if MIN_VERSION_base(4,11,0)
+#else
+import Data.Monoid ((<>))
+#endif
+
 import Network.GRPC.Server.Wai (WaiHandler, ServiceHandler(..), closeEarly)
 
 #if !MIN_VERSION_wai(3,2,2)

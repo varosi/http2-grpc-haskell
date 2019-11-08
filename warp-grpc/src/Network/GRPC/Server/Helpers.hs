@@ -10,6 +10,11 @@ import           Network.HTTP2.Server (NextTrailersMaker(..))
 import           Network.Wai (Request)
 import           Network.Wai.Handler.Warp (http2dataTrailers, defaultHTTP2Data, modifyHTTP2Data, HTTP2Data)
 
+#if MIN_VERSION_base(4,11,0)
+#else
+import Data.Monoid ((<>))
+#endif
+
 -- | Helper to set the GRPCStatus on the trailers reply.
 modifyGRPCStatus :: Request -> GRPCStatus -> IO ()
 modifyGRPCStatus req = modifyHTTP2Data req . makeGRPCTrailers

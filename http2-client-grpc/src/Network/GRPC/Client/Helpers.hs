@@ -27,6 +27,11 @@ import qualified Network.TLS as TLS
 import qualified Network.TLS.Extra.Cipher as TLS
 import Network.HPACK (HeaderList)
 
+#if MIN_VERSION_base(4,11,0)
+#else
+import Data.Monoid ((<>))
+#endif
+
 import Network.HTTP2.Client (ClientIO, ClientError, newHttp2FrameConnection, newHttp2Client, Http2Client(..), IncomingFlowControl(..), GoAwayHandler, FallBackFrameHandler, ignoreFallbackHandler, HostName, PortNumber, TooMuchConcurrency)
 import Network.HTTP2.Client.Helpers (ping)
 import Network.GRPC.Client
