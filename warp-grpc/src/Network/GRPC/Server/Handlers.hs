@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE LambdaCase #-}
@@ -295,4 +296,4 @@ handleRequestChunksLoop decoder handleMsg handleEof nextChunk =
 errorOnLeftOver :: (a -> IO b) -> ByteString -> a -> IO b
 errorOnLeftOver f rest
   | ByteString.null rest = f
-  | otherwise            = const $ closeEarly $ GRPCStatus INVALID_ARGUMENT ("left-overs: " <> rest)
+  | otherwise            = const $ putStrLn "left-over" >> closeEarly (GRPCStatus INVALID_ARGUMENT ("left-overs: " <> rest))
