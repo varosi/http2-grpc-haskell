@@ -1,4 +1,4 @@
-resolver: lts-14.27
+resolver: lts-15.4
 packages:
 - http2-grpc-types
 - http2-grpc-proto-lens
