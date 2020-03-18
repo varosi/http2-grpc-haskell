@@ -5,6 +5,7 @@
 module Network.GRPC.Server.Wai where
 
 import           Control.Exception (Handler(..), catches, SomeException, throwIO)
+import           Control.Monad.IO.Class
 import           Data.ByteString.Char8 (ByteString)
 import qualified Data.ByteString.Char8 as ByteString
 import           Data.ByteString.Lazy (fromStrict)
@@ -64,8 +65,8 @@ grpcApp compressions services =
         rep $ responseLBS status404 [] $ fromStrict ("not found: " <> rawPathInfo req)
 
 -- | Aborts a GRPC handler with a given GRPCStatus.
-closeEarly :: GRPCStatus -> IO a
-closeEarly = throwIO
+closeEarly :: MonadIO m => GRPCStatus -> m a
+closeEarly = liftIO . throwIO
 
 -- | Build a WAI 'Middleware' from a list of ServiceHandler.
 --
