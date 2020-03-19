@@ -1,4 +1,5 @@
-resolver: nightly-2020-03-17
+resolver: lts-15.4
+allow-newer: true
 packages:
 - http2-grpc-types
 - http2-grpc-proto-lens
@@ -8,4 +9,3 @@ packages:
 extra-deps:
 - proto3-wire-1.0.0
 - http2-client-0.9.0.0
-allow-newer: true
