@@ -1,5 +1,5 @@
 name:                warp-grpc
-version:             0.4.0.0
+version:             0.4.0.1
 github:              "haskell-grpc-native/http2-grpc-haskell"
 license:             BSD3
 author:              "Lucas DiCioccio, Alejandro Serrano"
