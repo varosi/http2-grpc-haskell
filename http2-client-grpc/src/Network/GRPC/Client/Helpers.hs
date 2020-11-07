@@ -32,10 +32,12 @@ import Network.HPACK (HeaderList)
 import Data.Monoid ((<>))
 #endif
 
-import Network.HTTP2.Client (ClientIO, ClientError, newHttp2FrameConnection, newHttp2Client, Http2Client(..), IncomingFlowControl(..), GoAwayHandler, FallBackFrameHandler, ignoreFallbackHandler, HostName, PortNumber, TooMuchConcurrency)
+import Network.HTTP2.Client (frameHttp2RawConnection, ClientIO, ClientError, newHttp2FrameConnection, newHttp2Client, Http2Client(..), IncomingFlowControl(..), GoAwayHandler, FallBackFrameHandler, ignoreFallbackHandler, HostName, PortNumber, TooMuchConcurrency)
 import Network.HTTP2.Client.Helpers (ping)
+import Network.HTTP2.Client.RawConnection (newRawHttp2ConnectionSocket, newRawHttp2ConnectionUnix)
 import Network.GRPC.Client
 import Network.GRPC.HTTP2.Encoding
+import qualified Network.Socket as Network
 
 -- | A simplified gRPC Client connected via an HTTP2Client to a given server.
 -- Each call from one client will share similar headers, timeout, compression.
@@ -61,12 +63,14 @@ data BackgroundTasks = BackgroundTasks {
   -- ^ Periodically ping the server.
   }
 
+data Address = AddressTCP HostName PortNumber
+             | AddressUnix FilePath
+             | AddressSocket Network.Socket
+
 -- | Configuration to setup a GrpcClient.
 data GrpcClientConfig = GrpcClientConfig {
-    _grpcClientConfigHost            :: !HostName
-  -- ^ Hostname of the server.
-  , _grpcClientConfigPort            :: !PortNumber
-  -- ^ Port of the server.
+    _grpcClientConfigAddress         :: !Address
+  -- ^ Address of the server
   , _grpcClientConfigHeaders         :: ![(ByteString, ByteString)]
   -- ^ Extra HTTP2 headers to pass to every call (e.g., authentication tokens).
   , _grpcClientConfigTimeout         :: !Timeout
@@ -87,7 +91,7 @@ data GrpcClientConfig = GrpcClientConfig {
 
 grpcClientConfigSimple :: HostName -> PortNumber -> UseTlsOrNot -> GrpcClientConfig
 grpcClientConfigSimple host port tls =
-    GrpcClientConfig host port [] (Timeout 3000) gzip (tlsSettings tls host port) (liftIO . throwIO) ignoreFallbackHandler 5000000 1000000
+    GrpcClientConfig (AddressTCP host port) [] (Timeout 3000) gzip (tlsSettings tls host port) (liftIO . throwIO) ignoreFallbackHandler 5000000 1000000
 
 type UseTlsOrNot = Bool
 
@@ -111,17 +115,22 @@ tlsSettings True host port = Just $ TLS.ClientParams {
 
 setupGrpcClient :: GrpcClientConfig -> ClientIO GrpcClient
 setupGrpcClient config = do
-  let host = _grpcClientConfigHost config
-  let port = _grpcClientConfigPort config
+  let addr = _grpcClientConfigAddress config
   let tls = _grpcClientConfigTLS config
   let compression = _grpcClientConfigCompression config
   let onGoAway = _grpcClientConfigGoAwayHandler config
   let onFallback = _grpcClientConfigFallbackHandler config
   let timeout = _grpcClientConfigTimeout config
   let headers = _grpcClientConfigHeaders config
-  let authority = ByteString.pack $ host <> ":" <> show port
+  let authority = ByteString.pack $ case addr of
+        AddressTCP host port -> host <> ":" <> show port
+        AddressUnix _ -> "localhost" -- Inspired by https://github.com/nodejs/node/issues/32326
+        AddressSocket _ -> "localhost" --TODO: Not sure if this is the right thing to do
 
-  conn <- newHttp2FrameConnection host port tls
+  conn <- case addr of
+    AddressTCP host port -> newHttp2FrameConnection host port tls
+    AddressUnix path -> frameHttp2RawConnection =<< newRawHttp2ConnectionUnix path tls
+    AddressSocket sock -> frameHttp2RawConnection =<< newRawHttp2ConnectionSocket sock tls
   cli <- newHttp2Client conn 8192 8192 [] onGoAway onFallback
   wuAsync <- async $ forever $ do
       threadDelay $ _grpcClientConfigWindowUpdateDelay config
