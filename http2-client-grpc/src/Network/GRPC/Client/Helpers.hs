@@ -65,7 +65,7 @@ data BackgroundTasks = BackgroundTasks {
 
 data Address = AddressTCP HostName PortNumber
              | AddressUnix FilePath
-             | AddressSocket Network.Socket
+             | AddressSocket Network.Socket Authority
 
 -- | Configuration to setup a GrpcClient.
 data GrpcClientConfig = GrpcClientConfig {
@@ -122,15 +122,15 @@ setupGrpcClient config = do
   let onFallback = _grpcClientConfigFallbackHandler config
   let timeout = _grpcClientConfigTimeout config
   let headers = _grpcClientConfigHeaders config
-  let authority = ByteString.pack $ case addr of
-        AddressTCP host port -> host <> ":" <> show port
-        AddressUnix _ -> "localhost" -- Inspired by https://github.com/nodejs/node/issues/32326
-        AddressSocket _ -> "localhost" --TODO: Not sure if this is the right thing to do
+  let authority =  case addr of
+        AddressTCP host port -> ByteString.pack $ host <> ":" <> show port
+        AddressUnix _ -> ByteString.pack "localhost"
+        AddressSocket _ auth -> auth
 
   conn <- case addr of
     AddressTCP host port -> newHttp2FrameConnection host port tls
     AddressUnix path -> frameHttp2RawConnection =<< newRawHttp2ConnectionUnix path tls
-    AddressSocket sock -> frameHttp2RawConnection =<< newRawHttp2ConnectionSocket sock tls
+    AddressSocket sock _ -> frameHttp2RawConnection =<< newRawHttp2ConnectionSocket sock tls
   cli <- newHttp2Client conn 8192 8192 [] onGoAway onFallback
   wuAsync <- async $ forever $ do
       threadDelay $ _grpcClientConfigWindowUpdateDelay config
