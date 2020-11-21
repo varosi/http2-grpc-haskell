@@ -63,6 +63,8 @@ data BackgroundTasks = BackgroundTasks {
   -- ^ Periodically ping the server.
   }
 
+-- | A generalized address that supports new TCP connections, new UNIX socket
+-- connections or using already connected sockets
 data Address = AddressTCP HostName PortNumber
              | AddressUnix FilePath
              | AddressSocket Network.Socket Authority
