@@ -8,4 +8,4 @@ packages:
 - http2-client-grpc
 extra-deps:
 - proto3-wire-1.0.0
-- http2-client-0.9.0.0
+- http2-client-0.10.0.0

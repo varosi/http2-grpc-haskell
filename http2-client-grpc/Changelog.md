@@ -2,6 +2,8 @@
 
 ## Unreleased changes
 
+Support connecting to unix sockets and already connected sockets. [#44](https://github.com/haskell-grpc-native/http2-grpc-haskell/pull/44)
+
 ## 0.8.0.0
 
 Fork `http2-client-grpc` to drop dependency on `proto-lens`.
