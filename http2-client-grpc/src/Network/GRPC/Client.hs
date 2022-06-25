@@ -5,6 +5,7 @@
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies        #-}
+{-# LANGUAGE PackageImports      #-}
 
 -- | A module adding support for gRPC over HTTP2.
 --
@@ -94,9 +95,9 @@ import Data.Monoid ((<>))
 
 import Network.GRPC.HTTP2.Types
 import Network.GRPC.HTTP2.Encoding
-import Network.HTTP2
+import Network.HTTP2.Frame
 import Network.HPACK
-import Network.HTTP2.Client hiding (next)
+import "http2-client" Network.HTTP2.Client hiding (next)
 import Network.HTTP2.Client.Helpers
 
 type CIHeaderList = [(CI ByteString, ByteString)]
@@ -126,10 +127,10 @@ throwOnPushPromise _ _ _ _ _ = lift $ throwIO UnallowedPushPromiseReceived
 -- | Wait for an RPC reply.
 waitReply
   :: (GRPCOutput r o)
-  => r -> Decoding -> Http2Stream -> IncomingFlowControl
+  => Http2Client -> r -> Decoding -> Http2Stream -> IncomingFlowControl
   -> ClientIO (RawReply o)
-waitReply rpc decoding stream flowControl =
-    format . fromStreamResult <$> waitStream stream flowControl throwOnPushPromise
+waitReply conn rpc decoding stream flowControl =
+    format . fromStreamResult <$> waitStream conn stream flowControl throwOnPushPromise
   where
     decompress = _getDecodingCompression decoding
     format rsp = do
@@ -283,7 +284,7 @@ streamRequest rpc v0 handler = RPCCall  rpc$ \conn stream isfc streamFlowControl
                     go v2
                 Left _ -> do
                     sendData conn stream setEndStream ""
-                    reply <- waitReply rpc decoding stream isfc
+                    reply <- waitReply conn rpc decoding stream isfc
                     pure (v2, reply)
     in go v0
 
@@ -325,7 +326,7 @@ singleRequest
 singleRequest rpc msg = RPCCall rpc $ \conn stream isfc osfc encoding decoding -> do
     let ocfc = _outgoingFlowControl conn
     sendSingleMessage rpc msg encoding setEndStream conn ocfc stream osfc
-    waitReply rpc decoding stream isfc
+    waitReply conn rpc decoding stream isfc
 
 -- | Handler for received message.
 type HandleMessageStep i o a = HeaderList -> a -> o -> ClientIO a

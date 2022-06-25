@@ -1,10 +1,12 @@
-resolver: nightly-2022-06-19
+resolver: lts-19.13
+system-ghc: true
 packages:
-  - http2-client-grpc
+  - http2-grpc-types
   - http2-grpc-proto-lens
   - http2-grpc-proto3-wire
-  - http2-grpc-types
   - warp-grpc
+  - http2-client-grpc
+  - bench-tool
 extra-deps:
   - git: https://github.com/lucasdicioccio/http2-client
     commit: 046b1f23ea547b75f1a3dc3d878603968bff4fb4

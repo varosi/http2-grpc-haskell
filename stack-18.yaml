@@ -1,5 +1,4 @@
-resolver: lts-18.3
-allow-newer: true
+resolver: lts-18.28
 packages:
   - http2-grpc-types
   - http2-grpc-proto-lens
@@ -8,9 +7,7 @@ packages:
   - http2-client-grpc
   - bench-tool
 extra-deps:
-  - http2-2.0.6
-  - http2-client-0.10.0.0
-  - proto-lens-0.7.0.0
-  - proto-lens-runtime-0.7.0.0
-  - proto3-wire-1.0.0
-  - warp-3.3.14
+  - git: https://github.com/lucasdicioccio/http2-client
+    commit: 046b1f23ea547b75f1a3dc3d878603968bff4fb4
+  - proto-lens-0.7.1.1@sha256:8419e86fd7f521206a991c3ccb1777332a07a8250b380b06694f9f301b1ff38d,2972
+  - proto-lens-runtime-0.7.0.2@sha256:25d11fd08b56025c89e6be5da46f40a82bd845218b235b9e0114253b45caa074,3051

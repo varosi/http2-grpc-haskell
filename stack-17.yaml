@@ -1,5 +1,4 @@
-resolver: lts-17.2
-allow-newer: true
+resolver: lts-17.15
 packages:
   - http2-grpc-types
   - http2-grpc-proto-lens
@@ -8,5 +7,7 @@ packages:
   - http2-client-grpc
   - bench-tool
 extra-deps:
-  - proto3-wire-1.0.0
-  - http2-client-0.10.0.0
+  - http2-3.0.3
+  - git: https://github.com/lucasdicioccio/http2-client
+    commit: 046b1f23ea547b75f1a3dc3d878603968bff4fb4
+  - warp-3.3.15

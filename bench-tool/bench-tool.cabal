@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e2c0b94f518b929cef4b5d01f972bc4e25cde9360b6bcc532730e62dea7187a5
+-- hash: 55d227f1000a57af28adf509eeccdb465720fbf0a9766ae0ae4f8a897276d7d1
 
 name:           bench-tool
 version:        0.4.0.1
@@ -44,7 +44,6 @@ library
     , case-insensitive >=1.2.0 && <1.3
     , containers
     , http-types ==0.12.*
-    , http2 >=1.6 && <3
     , http2-client
     , http2-client-grpc
     , http2-grpc-proto-lens
@@ -80,7 +79,6 @@ executable bench-tool-exe
     , case-insensitive >=1.2.0 && <1.3
     , containers
     , http-types ==0.12.*
-    , http2 >=1.6 && <3
     , http2-client
     , http2-client-grpc
     , http2-grpc-proto-lens
