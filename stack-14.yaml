@@ -1,5 +1,4 @@
 resolver: lts-14.27
-allow-newer: true
 packages:
 - http2-grpc-types
 - http2-grpc-proto-lens
@@ -8,4 +7,10 @@ packages:
 - http2-client-grpc
 extra-deps:
 - proto3-wire-1.0.0
-- http2-client-0.10.0.0
+- http2-3.0.3@sha256:309c7198fbccf136e949a2b630d7fec2557478c4af4a2c8c5523b71ec00c88b9,15906
+- git: https://github.com/lucasdicioccio/http2-client
+  commit: 046b1f23ea547b75f1a3dc3d878603968bff4fb4
+- warp-3.3.15
+- warp-tls-3.2.12
+- tls-1.5.4
+- network-byte-order-0.1.6@sha256:23d8b609ac43a69d04d5e8f411e5f86a0266c0e8b33b65f8c92ebda64273fe3a,1313

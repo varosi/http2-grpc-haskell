@@ -3,6 +3,7 @@
 {-# LANGUAGE GADTs             #-}
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE CPP               #-}
+{-# LANGUAGE PackageImports    #-}
 
 -- | Set of helpers helping with writing gRPC clients with not much exposure of
 -- the http2-client complexity.
@@ -25,14 +26,13 @@ import Data.ByteString.Char8 (ByteString)
 import Data.Default.Class (def)
 import qualified Network.TLS as TLS
 import qualified Network.TLS.Extra.Cipher as TLS
-import Network.HPACK (HeaderList)
 
 #if MIN_VERSION_base(4,11,0)
 #else
 import Data.Monoid ((<>))
 #endif
 
-import Network.HTTP2.Client (frameHttp2RawConnection, ClientIO, ClientError, newHttp2FrameConnection, newHttp2Client, Http2Client(..), IncomingFlowControl(..), GoAwayHandler, FallBackFrameHandler, ignoreFallbackHandler, HostName, PortNumber, TooMuchConcurrency)
+import "http2-client" Network.HTTP2.Client (frameHttp2RawConnection, ClientIO, ClientError, newHttp2FrameConnection, newHttp2Client, Http2Client(..), IncomingFlowControl(..), GoAwayHandler, FallBackFrameHandler, ignoreFallbackHandler, HostName, PortNumber, TooMuchConcurrency)
 import Network.HTTP2.Client.Helpers (ping)
 import Network.HTTP2.Client.RawConnection (newRawHttp2ConnectionSocket, newRawHttp2ConnectionUnix)
 import Network.GRPC.Client
