@@ -29,7 +29,7 @@ library
                      , http2-client >= 0.10 && < 0.11
                      , http2-grpc-types >= 0.5 && < 0.6
                      , text >= 1.2 && < 2.1
-                     , tls >= 1.4 && < 1.7
+                     , tls >= 1.4 && < 1.9
                      , network >= 2.6 && < 4
   default-language:    Haskell2010
 
