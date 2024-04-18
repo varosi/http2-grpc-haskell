@@ -1,6 +1,1 @@
 packages: http2-grpc-types http2-grpc-proto-lens http2-grpc-proto3-wire warp-grpc http2-client-grpc bench-tool
-
-source-repository-package
-    type: git
-    location: https://github.com/awakesecurity/proto3-wire
-    tag: 2eeb5faaf107f231fa6d33e25f4b791944d5ffae
