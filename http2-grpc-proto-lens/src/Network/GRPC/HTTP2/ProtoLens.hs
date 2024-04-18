@@ -12,7 +12,10 @@ module Network.GRPC.HTTP2.ProtoLens where
 import Data.Binary.Builder (fromByteString, putWord32be, singleton)
 import Data.Binary.Get (getByteString, getInt8, getWord32be, runGetIncremental)
 import qualified Data.ByteString.Char8 as ByteString
+#if MIN_VERSION_base(4,11,0)
 import Data.Kind (Type)
+#else
+#endif
 import Data.ProtoLens.Encoding (decodeMessage, encodeMessage)
 import Data.ProtoLens.Message (Message)
 import Data.ProtoLens.Service.Types (HasMethod, HasMethodImpl (..), Service (..))
@@ -28,7 +31,11 @@ import Network.GRPC.HTTP2.Encoding
 import Network.GRPC.HTTP2.Types
 
 -- | A proxy type for giving static information about RPCs.
+#if MIN_VERSION_base(4,11,0)
 data RPC (s :: Type) (m :: Symbol) = RPC
+#else
+data RPC (s :: *) (m :: Symbol) = RPC
+#endif
 
 instance (Service s, HasMethod s m) => IsRPC (RPC s m) where
   path rpc = "/" <> pkg rpc Proxy <> "." <> srv rpc Proxy <> "/" <> meth rpc Proxy
