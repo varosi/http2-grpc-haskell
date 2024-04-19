@@ -1,13 +1,7 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
---
--- see: https://github.com/sol/hpack
---
--- hash: b8e5e20414580fa874a85f16cdafdd883f66c7e2f215e9e2ca25ae951b5470ab
-
 name:           http2-grpc-proto-lens
-version:        0.1.0.0
+version:        0.1.1.0
 synopsis:       Encoders based on `proto-lens` for gRPC over HTTP2.
 description:    Please see the README on GitHub at <https://github.com/haskell-grpc-native/http2-grpc-haskell/blob/master/http2-grpc-proto-lens/README.md>
 category:       Network
