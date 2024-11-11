@@ -1,0 +1,17 @@
+resolver: lts-21.25
+system-ghc: true
+packages:
+  - http2-grpc-types
+  - http2-grpc-proto-lens
+  - http2-grpc-proto3-wire
+  - warp-grpc
+  - http2-client-grpc
+  - bench-tool
+extra-deps:
+  - git: https://github.com/lucasdicioccio/http2-client
+    commit: a45883ccbd68c0c52f8e4cc6cca052fb660d57e2
+  - proto3-wire-1.4.3
+  - http2-4.1.4
+  - recv-0.1.0
+  - warp-tls-3.3.6
+  - warp-3.3.25
