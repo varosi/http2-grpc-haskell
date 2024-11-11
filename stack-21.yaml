@@ -1,5 +1,4 @@
 resolver: lts-21.25
-system-ghc: true
 packages:
   - http2-grpc-types
   - http2-grpc-proto-lens
